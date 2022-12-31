@@ -1,20 +1,21 @@
-name: PlayerWarps
-version: 1.0.0-BETA
+name: AeroPwarp
+version: 2.0.0
 main: SchdowNVIDIA\PlayerWarps\Main
-api: 3.0.0
-author: Pydow, SchdowNVIDIA
+api: 4.0.0
+author: Pydow, SchdowNVIDIA, FiePaw
 description: PlayerWarps Plugin
 depend:
   - EconomyAPI
 commands:
   pwarp:
     description: "PlayerWarps command"
-    permission:
+    permission: use.pwarp
 permissions:
+  use.pwarp:
+    default: true
   pwarp.*:
     default: op
-    children:
-      pwarp.warps.2:
-        default: true
-      pwarp.warps.unlimited:
-        default: true
+  pwarp.warps.2:
+    default: true
+  pwarp.warps.unlimited:
+    default: true
