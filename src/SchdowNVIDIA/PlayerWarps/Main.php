@@ -1,14 +1,15 @@
 <?php
 
 /* 
-     _____  _                    __          __                  
-    |  __ \| |                   \ \        / /                  
-    | |__) | | __ _ _   _  ___ _ _\ \  /\  / /_ _ _ __ _ __  ___ 
-    |  ___/| |/ _` | | | |/ _ \ '__\ \/  \/ / _` | '__| '_ \/ __|
-    | |    | | (_| | |_| |  __/ |   \  /\  / (_| | |  | |_) \__ \
-    |_|    |_|\__,_|\__, |\___|_|    \/  \/ \__,_|_|  | .__/|___/
-                 __/ |                            | |        
-                |___/                             |_|        
+                         _____                           
+     /\                 |  __ \                          
+    /  \   ___ _ __ ___ | |__) |_      ____ _ _ __ _ __  
+   / /\ \ / _ \ '__/ _ \|  ___/\ \ /\ / / _` | '__| '_ \ 
+  / ____ \  __/ | | (_) | |     \ V  V / (_| | |  | |_) |
+ /_/    \_\___|_|  \___/|_|      \_/\_/ \__,_|_|  | .__/ 
+                                                  | |    
+                                                  |_|    
+
                 
     Copyright (C) 2019 SchdowNVIDIA
 
@@ -32,7 +33,8 @@ use onebone\economyapi\EconomyAPI;
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
 use pocketmine\event\Listener;
-use pocketmine\level\Position;
+use pocketmine\world\World;
+use pocketmine\world\Position;
 use pocketmine\math\Vector3;
 use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
@@ -41,12 +43,23 @@ use pocketmine\utils\TextFormat;
 
 class Main extends PluginBase implements Listener {
 
-    public function onEnable()
+    public function onEnable(): void
     {
         @mkdir($this->getDataFolder());
         $this->saveResource("pwarps.yml");
         $this->getServer()->getPluginManager()->registerEvents($this, $this);
         $this->saveDefaultConfig();
+        $this->getServer()->getLogger("                         
+                         _____                           
+        /\                 |  __ \                          
+       /  \   ___ _ __ ___ | |__) |_      ____ _ _ __ _ __  
+      / /\ \ / _ \ '__/ _ \|  ___/\ \ /\ / / _` | '__| '_ \ 
+     / ____ \  __/ | | (_) | |     \ V  V / (_| | |  | |_) |
+    /_/    \_\___|_|  \___/|_|      \_/\_/ \__,_|_|  | .__/ 
+                                                     | |    
+                                                     |_|    
+       ");
+
     }
 
     public function onCommand(CommandSender $sender, Command $command, string $label, array $args): bool
@@ -59,54 +72,54 @@ class Main extends PluginBase implements Listener {
         $PWARPS = new Config($this->getDataFolder() . "/pwarps.yml", Config::YAML);
         if($command->getName() == "pwarp") {
             if(!isset($args[0])) {
-                $sender->sendMessage("§cWRONG USAGE: §fRun /pwarp help to get help about PlayerWarps.");
+                $sender->sendMessage("§8[§bAero§3Pwarp§8] §cPENGGUNAA SALAH: §fKetik /pwarp help untuk mengetahui command");
                 return true;
             }
             switch($args[0]) {
                 case "price":
-                    $sender->sendMessage("§8[§aPlayerWarps§8] §fThe current prices of an PWarp are:");
+                    $sender->sendMessage("§8[§bAero§3Pwarp§8] §fThe current prices of an PWarp are:");
                     $sender->sendMessage("§bCreate: §f" .$createPrice."$");
                     $sender->sendMessage("§bNewpos: §f" .$newposPrice."$");
                     $sender->sendMessage("§bDelete: §f" .$deletePrice."$");
                     return true;
                 case "delete":
                     if(!isset($args[1])) {
-                        $sender->sendMessage("§cWRONG USAGE: §fRun /pwarp help to get help about PlayerWarps.");
+                        $sender->sendMessage("§8[§bAero§3Pwarp§8] §cWRONG USAGE: §fRun /pwarp help to get help about PlayerWarps.");
                         return true;
                     }
                     $pwarpname = $args[1];
                     $money = $economy->myMoney($name);
                     if($money < $deletePrice) {
-                        $sender->sendMessage("§cYou don't have enough money to delete an PWarp! You need " . $createPrice . "$ to create one!");
+                        $sender->sendMessage("§8[§bAero§3Pwarp§8] §cKamu tidak memiliki cukup uang untuk menghapus warp, kamu butuh Rp." . $createPrice . " untuk menghapusnya");
                         return true;
                     }
                     if(!$PWARPS->exists($pwarpname)) {
-                        $sender->sendMessage("§cERROR: §fThere is no PWarp with the name §b" . $pwarpname . "§f!");
+                        $sender->sendMessage("§8[§bAero§3Pwarp§8] §cERROR: §fTidak ada warp dengan nama §b" . $pwarpname . "§f!");
                         return true;
                     }
                     if($PWARPS->getNested($pwarpname.".owner") != $name) {
-                        $sender->sendMessage("§cYou can't delete this pwarp, because it's not yours!");
+                        $sender->sendMessage("§8[§bAero§3Pwarp§8] §cKamu tidak bisa menghapus warp ini, warp ini bukan milikmu!");
                         return true;
                     }
                     $PWARPS->remove($pwarpname);
                     $PWARPS->save();
                     $PWARPS->reload();
-                    $sender->sendMessage("§8[§aPlayerWarps§8] §fPWarp §b".$pwarpname." §fsuccessfully deleted!");
+                    $sender->sendMessage("§8[§bAero§3Pwarp§8] §fPWarp §b".$pwarpname." §aBerhasil di Hapus!");
                     return true;
 
                 case "create":
                     if(!isset($args[1])) {
-                        $sender->sendMessage("§cWRONG USAGE: §fRun /pwarp help to get help about PlayerWarps.");
+                        $sender->sendMessage("§8[§bAero§3Pwarp§8] §cWRONG USAGE: §fRun /pwarp help to get help about PlayerWarps.");
                         return true;
                     }
                     $pwarpname = $args[1];
                     $money = $economy->myMoney($name);
                     if($money < $createPrice) {
-                        $sender->sendMessage("§cYou don't have enough money to create a PWarp! You need " . $createPrice . "$ to create one!");
+                        $sender->sendMessage("§8[§bAero§3Pwarp§8] §cKamu tidak memiliki cukup uang untuk membuat warp, kamu butuh Rp." . $createPrice . " untuk membuat warp!");
                         return true;
                     }
                     if($PWARPS->exists($pwarpname)) {
-                        $sender->sendMessage("§cERROR: §fThere is already a PWarp with the name" . $pwarpname . "!");
+                        $sender->sendMessage("§8[§bAero§3Pwarp§8] §cERROR: §fWarp sudah ada dengan nama" . $pwarpname . "!");
                         return true;
                     }
                     $economy->reduceMoney($name, $createPrice);
@@ -121,7 +134,7 @@ class Main extends PluginBase implements Listener {
                     $PWARPS->setNested($pwarpname.".world", $world);
                     $PWARPS->save();
                     $PWARPS->reload();
-                    $sender->sendMessage("§c§8[§aPlayerWarps§8] §fThe PWarp §b" . $pwarpname ." §fhas been successfully created!");
+                    $sender->sendMessage("§8[§bAero§3Pwarp§8] §fPwarp §b" . $pwarpname ." §fBerhasil dibuat!");
                     return true;
                 case "help":
                     $this->getMessage($sender, "help");
@@ -129,9 +142,10 @@ class Main extends PluginBase implements Listener {
                 case "info":
                     $pwarpname = $args[1];
                     if(!$PWARPS->exists($pwarpname)) {
-                        $sender->sendMessage("§cERROR: §fThere is no pwarp with the name §b" . $pwarpname . "§f!");
+                        $sender->sendMessage("§8[§bAero§3Pwarp§8] §cERROR: §fTidak ada pwarp dengan nama §b" . $pwarpname . "§f!"); 
                         return true;
                     }
+                    /** Dev nya kagak update2 Bruh **/
                     $x = $PWARPS->getNested($pwarpname.".x");
                     $y = $PWARPS->getNested($pwarpname.".y");
                     $z = $PWARPS->getNested($pwarpname.".z");
@@ -141,34 +155,34 @@ class Main extends PluginBase implements Listener {
                     $sender->sendMessage("Owner: " . $pwarpOwner);
                     $sender->sendMessage("Position: (X: " . $x. ", Y: " . $y . ", Z: " . $z. ")");
                     $sender->sendMessage("World: " . $world);
-                    $sender->sendMessage("--- PlayerWarp Info ---");
+                    $sender->sendMessage("--- AeroPWarp Info ---");
                     return true;
                 case "newpos":
                     $pwarpname = $args[1];
                     if(!$PWARPS->exists($pwarpname)) {
-                        $sender->sendMessage("§cERROR: §fThere is no pwarp with the name §b" . $pwarpname . "§f!");
+                        $sender->sendMessage("§8[§bAero§3Pwarp§8] §cERROR: §fTidak ada warp dengan nama §b" . $pwarpname . "§f!");
                         return true;
                     }
                     if($PWARPS->getNested($pwarpname.".owner") == $sender->getName()) {
-                        $sender->sendMessage("§cYou can't edit this warp, because it's not yours!");
+                        $sender->sendMessage("§8[§bAero§3Pwarp§8] §cKamu tidak bisa edit warp ini, karena ini bukan milikmu!");
                         return true;
                     }
                     if($economy->myMoney($name) < $newposPrice) {
-                        $sender->sendMessage("§cYou don't have enough money to newpos this warp!");
+                        $sender->sendMessage("§8[§bAero§3Pwarp§8] §cKamu tidak memilik cukup uang untuk membuat posisi baru!");
                         return true;
                     }
                     $economy->reduceMoney($name, $newposPrice);
-                    $x = $sender->getX();
-                    $y = $sender->getY();
-                    $z = $sender->getZ();
-                    $world = $sender->getLevel()->getName();
+                    $x = $sender->getPosition()->getX();
+                    $y = $sender->getPosition()->getY();
+                    $z = $sender->getPosition()->getZ();
+                    $world = $sender->getWorld()->getName();
                     $PWARPS->setNested($pwarpname. ".x", $x);
                     $PWARPS->setNested($pwarpname . ".y", $y);
                     $PWARPS->setNested($pwarpname.".z", $z);
                     $PWARPS->setNested($pwarpname.".world", $world);
                     $PWARPS->save();
                     $PWARPS->reload();
-                    $sender->sendMessage("§8[§aPlayerWarps§8] §fNew position has been set.");
+                    $sender->sendMessage("§8[§bAero§3Pwarp§8] §fPosisi baru berhasil disetting!.");
                     return true;
                 case "list":
                     $pwarplist = array();
@@ -184,7 +198,7 @@ class Main extends PluginBase implements Listener {
                 default:
                     $pwarpname = $args[0];
                     if(!$PWARPS->exists($pwarpname)) {
-                        $sender->sendMessage("§cERROR: §fThere is no pwarp with the name " . $pwarpname . "!");
+                        $sender->sendMessage("§8[§bAero§3Pwarp§8] §cERROR: §fTidak ada pwarp dengan nama " . $pwarpname . "!");
                         return true;
                     }
                     $x = $PWARPS->getNested($pwarpname.".x");
@@ -192,7 +206,7 @@ class Main extends PluginBase implements Listener {
                     $z = $PWARPS->getNested($pwarpname.".z");
                     $level = $this->getServer()->getLevelByName($PWARPS->getNested($pwarpname.".world"));
                     $sender->teleport(new Position($x, $y, $z, $level));
-                    $sender->sendMessage("§8[§aPlayerWarps§8] §fYou've been successfully teleported to the PWarp §b" . $pwarpname . "§f!");
+                    $sender->sendMessage("§8[§bAero§3Pwarp§8] §bKamu berhasil teleport ke §b" . $pwarpname . "§f!");
                     return true;
             }
         }
@@ -200,7 +214,7 @@ class Main extends PluginBase implements Listener {
 
     public function getMessage(Player $player, $type) {
         if($type == "help") {
-            $player->sendMessage("--- PlayerWarps Help ---");
+            $player->sendMessage("--- AeroPwarps Help ---");
             $player->sendMessage("§f/pwarp <pwarp-name> §7- teleport to an pwarp");
             $player->sendMessage("§f/pwarp price §7- shows alls prices of an pwarp");
             $player->sendMessage("§f/pwarp create <pwarpname> §7- create an pwarp");
@@ -208,7 +222,7 @@ class Main extends PluginBase implements Listener {
             $player->sendMessage("§f/pwarp newpos <pwarp-name> §7- change position of an pwarp");
             $player->sendMessage("§f/pwarp info <pwarp-name> §7- get info of an pwarp");
             $player->sendMessage("§f/pwarp list §7- get a list of all pwarps");
-            $player->sendMessage("--- PlayerWarps Help ---");
+            $player->sendMessage("--- AeroPwarps Help ---");
         }
     }
 }
