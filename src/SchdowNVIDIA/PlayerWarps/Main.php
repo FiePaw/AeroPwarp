@@ -50,7 +50,7 @@ class Main extends PluginBase implements Listener {
         $this->getServer()->getPluginManager()->registerEvents($this, $this);
         $this->saveDefaultConfig();
         $this->getServer()->getLogger("                         
-                         _____                           
+                            _____                           
         /\                 |  __ \                          
        /  \   ___ _ __ ___ | |__) |_      ____ _ _ __ _ __  
       / /\ \ / _ \ '__/ _ \|  ___/\ \ /\ / / _` | '__| '_ \ 
@@ -151,7 +151,7 @@ class Main extends PluginBase implements Listener {
                     $z = $PWARPS->getNested($pwarpname.".z");
                     $world = $PWARPS->getNested($pwarpname.".world");
                     $pwarpOwner = $PWARPS->getNested($pwarpname.".owner");
-                    $sender->sendMessage("--- PlayerWarp Info ---");
+                    $sender->sendMessage("--- AeroPWarp Info ---");
                     $sender->sendMessage("Owner: " . $pwarpOwner);
                     $sender->sendMessage("Position: (X: " . $x. ", Y: " . $y . ", Z: " . $z. ")");
                     $sender->sendMessage("World: " . $world);
