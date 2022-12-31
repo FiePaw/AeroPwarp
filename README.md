@@ -18,3 +18,12 @@ Other Plugin Economy will added next update
 # Next Update
 
 - Added UI
+
+# Command
+
+- /pwarp
+
+# ALERT!
+
+This is not full PM4 and have much bug most code must be update, if you really need this plugin
+contact me at discord FiePaw#3376 [This plugin is Free]
