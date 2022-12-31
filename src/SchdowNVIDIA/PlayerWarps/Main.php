@@ -36,6 +36,7 @@ use pocketmine\event\Listener;
 use pocketmine\world\World;
 use pocketmine\world\Position;
 use pocketmine\math\Vector3;
+use pocketmine\player\Player;
 use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
@@ -49,7 +50,7 @@ class Main extends PluginBase implements Listener {
         $this->saveResource("pwarps.yml");
         $this->getServer()->getPluginManager()->registerEvents($this, $this);
         $this->saveDefaultConfig();
-        $this->getServer()->getLogger("                         
+        $this->getLogger()->info("                         
                             _____                           
         /\                 |  __ \                          
        /  \   ___ _ __ ___ | |__) |_      ____ _ _ __ _ __  
